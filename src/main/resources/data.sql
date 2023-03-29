@@ -2,7 +2,7 @@
 
 	INSERT INTO maquina (id, nombre, cliente_id) VALUES (1, 'Supermáquina', 1);
 
-	INSERT INTO contador_manuales (id, maquina_id, entradas, salidas, fecha) VALUES (1, 1, 100, 99, '2023-01-21');
+	INSERT INTO contador_manuales (id, maquina_id, entradas, salidas, fecha) VALUES (1, 1, 100, 99, '2023-01-21 10:00:00');
 
 	INSERT INTO historico_recaudaciones (id, maquina_id, fecha, importe, contador_manuales_id, cliente_id) VALUES (1, 1, '2023-01-21', 5, 1, 1);
 

@@ -1,24 +1,16 @@
 package com.acrismatic.acrismatic.domain.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.time.LocalDateTime;
-
-@Getter
-@Setter
+@Data
 @Builder
-@AllArgsConstructor
+@EqualsAndHashCode
 public class IrregularCollection {
-    private Long collectionId;
-    private Long manualId;
-    private Long automaticId;
-    private Integer manualEntries;
-    private Integer manualExits;
-    private LocalDateTime manualDates;
-    private Integer automaticEntries;
-    private Integer automaticExits;
-    private LocalDateTime automaticDates;
+    private long collectionId;
+    private long manualId;
+    private long automaticId;
+    private Manual manuals;
+    private Automatic automatics;
 }

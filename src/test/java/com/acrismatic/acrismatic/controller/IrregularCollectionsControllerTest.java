@@ -1,8 +1,13 @@
 package com.acrismatic.acrismatic.controller;
 
-import com.acrismatic.acrismatic.controller.dto.IrregularCollectionsDTO;
+import com.acrismatic.acrismatic.controller.dto.AutomaticDTO;
+import com.acrismatic.acrismatic.controller.dto.CustomResponseDTO;
+import com.acrismatic.acrismatic.controller.dto.IrregularCollectionDTO;
+import com.acrismatic.acrismatic.controller.dto.ManualDTO;
+import com.acrismatic.acrismatic.domain.model.Automatic;
+import com.acrismatic.acrismatic.domain.model.CustomResponse;
 import com.acrismatic.acrismatic.domain.model.IrregularCollection;
-import com.acrismatic.acrismatic.domain.model.IrregularCollections;
+import com.acrismatic.acrismatic.domain.model.Manual;
 import com.acrismatic.acrismatic.service.IrregularCollectionsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,10 +19,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 public class IrregularCollectionsControllerTest {
@@ -28,39 +33,66 @@ public class IrregularCollectionsControllerTest {
     @Mock
     private IrregularCollectionsService service;
 
-    private IrregularCollections irregularCollections;
+    private final LocalDateTime date = LocalDateTime.now();
+
+    private final Automatic automatic = Automatic.builder()
+            .automaticEntries(100)
+            .automaticExists(98)
+            .date(date)
+            .build();
+
+    private final Manual manual = Manual.builder()
+            .manualEntries(100)
+            .manualExits(99)
+            .date(date)
+            .build();
+
+    private final IrregularCollection irregularCollection = IrregularCollection.builder()
+            .collectionId(1)
+            .manualId(1)
+            .automaticId(3)
+            .manuals(manual)
+            .automatics(automatic)
+            .build();
+
+    private final CustomResponse customResponse = CustomResponse.builder()
+            .machine("supermáquina")
+            .client("Bar Pepe")
+            .irregularCollections(Arrays.asList(irregularCollection))
+            .build();
+
+    private final CustomResponseDTO expectedCustomResponseDTO = CustomResponseDTO.builder()
+            .machine("supermáquina")
+            .client("Bar Pepe")
+            .irregularCollections(Arrays.asList(
+                    IrregularCollectionDTO.builder()
+                            .collectionId(1)
+                            .manualId(1)
+                            .automaticId(3)
+                            .manuals(ManualDTO.builder()
+                                    .manualEntries(100)
+                                    .manualExits(99)
+                                    .date(date)
+                                    .build())
+                            .automatics(AutomaticDTO.builder()
+                                    .automaticEntries(100)
+                                    .automaticExists(98)
+                                    .date(date)
+                                    .build())
+                            .build()
+            ))
+            .build();
 
     @BeforeEach
     public void setUp() {
-        IrregularCollection irregularCollection = IrregularCollection.builder()
-                .collectionId(1L)
-                .manualId(100L)
-                .automaticId(200L)
-                .manualEntries(5)
-                .manualExits(3)
-                .manualDates(LocalDateTime.now())
-                .automaticEntries(10)
-                .automaticExits(8)
-                .automaticDates(LocalDateTime.now())
-                .build();
-
-        irregularCollections = IrregularCollections.builder()
-                .machine("Machine1")
-                .client("Client1")
-                .irregularCollections(Collections.singletonList(irregularCollection))
-                .build();
+        when(service.getIrregularCollections()).thenReturn(customResponse);
     }
 
     @Test
-    public void getIrregularCollectionsTest() {
-        when(service.getRecaudacionesIrregulares()).thenReturn(irregularCollections);
-
-        ResponseEntity<IrregularCollectionsDTO> response = controller.getIrregularCollections();
-
+    public void testGetIrregularCollections() {
+        ResponseEntity<CustomResponseDTO> response = controller.getIrregularCollections();
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        IrregularCollectionsDTO dto = response.getBody();
-        assertEquals(irregularCollections.getMachine(), dto.getMachine());
-        assertEquals(irregularCollections.getClient(), dto.getClient());
-        assertEquals(irregularCollections.getIrregularCollections().size(), dto.getIrregularCollections().size());
+        assertEquals(expectedCustomResponseDTO, response.getBody());
+        verify(service, times(1)).getIrregularCollections();
     }
 }

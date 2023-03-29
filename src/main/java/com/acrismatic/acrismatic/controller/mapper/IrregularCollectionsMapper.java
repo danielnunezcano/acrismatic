@@ -1,7 +1,7 @@
 package com.acrismatic.acrismatic.controller.mapper;
 
-import com.acrismatic.acrismatic.controller.dto.IrregularCollectionsDTO;
-import com.acrismatic.acrismatic.domain.model.IrregularCollections;
+import com.acrismatic.acrismatic.controller.dto.CustomResponseDTO;
+import com.acrismatic.acrismatic.domain.model.CustomResponse;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -9,5 +9,5 @@ import org.mapstruct.factory.Mappers;
 public interface IrregularCollectionsMapper {
     IrregularCollectionsMapper INSTANCE = Mappers.getMapper(IrregularCollectionsMapper.class);
 
-    IrregularCollectionsDTO toDTO(IrregularCollections irregularCollections);
+    CustomResponseDTO toDTO(CustomResponse response);
 }

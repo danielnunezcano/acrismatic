@@ -1,17 +1,15 @@
 package com.acrismatic.acrismatic.controller.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
 @AllArgsConstructor
-public class IrregularCollectionsDTO {
+@NoArgsConstructor
+@EqualsAndHashCode
+public class CustomResponseDTO {
     private String machine;
     private String client;
     private List<IrregularCollectionDTO> irregularCollections;

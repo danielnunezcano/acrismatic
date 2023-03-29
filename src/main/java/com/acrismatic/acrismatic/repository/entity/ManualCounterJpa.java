@@ -29,6 +29,6 @@ public class ManualCounterJpa {
     @Column(name = "salidas")
     private Integer exits;
 
-    @Column(name = "fecha")
+    @Column(name = "fecha", nullable = false)
     private LocalDateTime date;
 }

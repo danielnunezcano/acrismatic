@@ -1,17 +1,15 @@
 package com.acrismatic.acrismatic.domain.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Data
 @Builder
-@AllArgsConstructor
-public class IrregularCollections {
+@EqualsAndHashCode
+public class CustomResponse {
     private String machine;
     private String client;
     private List<IrregularCollection> irregularCollections;

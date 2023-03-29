@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Data
@@ -32,7 +33,7 @@ public class CollectionHistoryJpa {
     private ClientJpa client;
 
     @Column(name = "fecha")
-    private LocalDateTime date;
+    private LocalDate date;
 
     @Column(name = "importe")
     private Integer amount;
