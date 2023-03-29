@@ -9,8 +9,8 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class CustomResponseDTO {
-    private String machine;
-    private String client;
-    private List<IrregularCollectionDTO> irregularCollections;
+public class MachineDTO {
+    private String maquina;
+    private String cliente;
+    private List<IrregularCollectionDTO> recaudacionesIrregulares;
 }

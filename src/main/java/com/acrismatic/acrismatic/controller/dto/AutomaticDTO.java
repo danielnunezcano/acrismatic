@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class AutomaticDTO {
-    private int automaticEntries;
-    private int automaticExists;
-    private LocalDateTime date;
+    private int entradasAutomaticas;
+    private int salidasAutomaticas;
+    private LocalDateTime fecha;
 }

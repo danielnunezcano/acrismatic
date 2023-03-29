@@ -8,14 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class IrregularCollectionDTO {
-    private int collectionId;
-    private int manualId;
-    private int automaticId;
-    private ManualDTO manuals;
-    private AutomaticDTO automatics;
+    private int idRecaudacion;
+    private int idManual;
+    private int idAutomatico;
+    private ManualDTO manuales;
+    private AutomaticDTO automaticos;
 }
-
-
-
-
-

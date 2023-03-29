@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @EqualsAndHashCode
 public class ManualDTO {
-    private int manualEntries;
-    private int manualExits;
-    private LocalDateTime date;
+    private int entradasManuales;
+    private int salidasManuales;
+    private LocalDateTime fecha;
 }

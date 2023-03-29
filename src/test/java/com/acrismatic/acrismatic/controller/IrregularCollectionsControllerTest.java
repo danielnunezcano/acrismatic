@@ -1,13 +1,7 @@
 package com.acrismatic.acrismatic.controller;
 
-import com.acrismatic.acrismatic.controller.dto.AutomaticDTO;
-import com.acrismatic.acrismatic.controller.dto.CustomResponseDTO;
-import com.acrismatic.acrismatic.controller.dto.IrregularCollectionDTO;
-import com.acrismatic.acrismatic.controller.dto.ManualDTO;
-import com.acrismatic.acrismatic.domain.model.Automatic;
-import com.acrismatic.acrismatic.domain.model.CustomResponse;
-import com.acrismatic.acrismatic.domain.model.IrregularCollection;
-import com.acrismatic.acrismatic.domain.model.Manual;
+import com.acrismatic.acrismatic.controller.dto.*;
+import com.acrismatic.acrismatic.domain.model.*;
 import com.acrismatic.acrismatic.service.IrregularCollectionsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
@@ -55,42 +50,43 @@ public class IrregularCollectionsControllerTest {
             .automatics(automatic)
             .build();
 
-    private final CustomResponse customResponse = CustomResponse.builder()
+
+    private final Machine machine = Machine.builder()
             .machine("supermáquina")
             .client("Bar Pepe")
             .irregularCollections(Arrays.asList(irregularCollection))
             .build();
 
-    private final CustomResponseDTO expectedCustomResponseDTO = CustomResponseDTO.builder()
-            .machine("supermáquina")
-            .client("Bar Pepe")
-            .irregularCollections(Arrays.asList(
-                    IrregularCollectionDTO.builder()
-                            .collectionId(1)
-                            .manualId(1)
-                            .automaticId(3)
-                            .manuals(ManualDTO.builder()
-                                    .manualEntries(100)
-                                    .manualExits(99)
-                                    .date(date)
-                                    .build())
-                            .automatics(AutomaticDTO.builder()
-                                    .automaticEntries(100)
-                                    .automaticExists(98)
-                                    .date(date)
-                                    .build())
-                            .build()
-            ))
-            .build();
+    private final List<MachineDTO> expectedCustomResponseDTO =
+            Arrays.asList(MachineDTO.builder().maquina("supermáquina")
+                    .cliente("Bar Pepe")
+                    .recaudacionesIrregulares(Arrays.asList(
+                            IrregularCollectionDTO.builder()
+                                    .idRecaudacion(1)
+                                    .idManual(1)
+                                    .idAutomatico(3)
+                                    .manuales(ManualDTO.builder()
+                                            .entradasManuales(100)
+                                            .salidasManuales(99)
+                                            .fecha(date)
+                                            .build())
+                                    .automaticos(AutomaticDTO.builder()
+                                            .entradasAutomaticas(100)
+                                            .salidasAutomaticas(98)
+                                            .fecha(date)
+                                            .build())
+                                    .build()
+                    ))
+                    .build());
 
     @BeforeEach
     public void setUp() {
-        when(service.getIrregularCollections()).thenReturn(customResponse);
+        when(service.getIrregularCollections()).thenReturn(Arrays.asList(machine));
     }
 
     @Test
     public void testGetIrregularCollections() {
-        ResponseEntity<CustomResponseDTO> response = controller.getIrregularCollections();
+        ResponseEntity<List<MachineDTO>> response = controller.getIrregularCollections();
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(expectedCustomResponseDTO, response.getBody());
         verify(service, times(1)).getIrregularCollections();

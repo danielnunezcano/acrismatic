@@ -1,13 +1,12 @@
 package com.acrismatic.acrismatic.service;
 
-import com.acrismatic.acrismatic.domain.model.Automatic;
-import com.acrismatic.acrismatic.domain.model.CustomResponse;
-import com.acrismatic.acrismatic.domain.model.IrregularCollection;
-import com.acrismatic.acrismatic.domain.model.Manual;
+import com.acrismatic.acrismatic.domain.model.*;
 import com.acrismatic.acrismatic.repository.AutomaticCounterHistoryJpaRepository;
+import com.acrismatic.acrismatic.repository.MachineJpaRepository;
 import com.acrismatic.acrismatic.repository.CollectionHistoryJpaRepository;
 import com.acrismatic.acrismatic.repository.entity.AutomaticCounterHistoryJpa;
 import com.acrismatic.acrismatic.repository.entity.CollectionHistoryJpa;
+import com.acrismatic.acrismatic.repository.entity.MachineJpa;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,25 +18,29 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class IrregularCollectionsServiceImpl implements IrregularCollectionsService {
 
+    private final MachineJpaRepository machineJpaRepository;
     private final CollectionHistoryJpaRepository collectionHistoryJpaRepository;
 
     private final AutomaticCounterHistoryJpaRepository automaticCounterHistoryJpaRepository;
 
-    public CustomResponse getIrregularCollections() {
-        List<CollectionHistoryJpa> collectionHistoryJpas = collectionHistoryJpaRepository.findAll();
-        List<IrregularCollection> irregularCollections = getIrregularCollectionsList(collectionHistoryJpas);
-        return getCustomResponse(collectionHistoryJpas, irregularCollections);
+    @Override
+    public List<Machine> getIrregularCollections() {
+        return toMachines(machineJpaRepository.findAll());
     }
 
-    private CustomResponse getCustomResponse(final List<CollectionHistoryJpa> collectionHistoryJpas,
-                                             final List<IrregularCollection> irregularCollections) {
-        return CustomResponse.builder()
-                .machine(collectionHistoryJpas.get(0).getMachine().getName())
-                .client(collectionHistoryJpas.get(0).getMachine().getClient().getName())
-                .irregularCollections(irregularCollections)
-                .build();
+
+    private List<Machine> toMachines(final List<MachineJpa> machineJpas){
+        return machineJpas.stream().map(machineJpa -> {
+            List<CollectionHistoryJpa> collectionHistoryJpas = collectionHistoryJpaRepository.findByMachineId(machineJpa.getId());
+            List<IrregularCollection> irregularCollections = getIrregularCollectionsList(collectionHistoryJpas);
+            return Machine.builder()
+                    .machine(machineJpa.getName())
+                    .client(machineJpa.getClient().getName())
+                    .irregularCollections(irregularCollections)
+                    .build();
+        }).collect(Collectors.toList());
     }
-    
+
     private List<IrregularCollection> getIrregularCollectionsList(final List<CollectionHistoryJpa> collectionHistoryJpas){
         return collectionHistoryJpas.stream().map(collectionHistoryJpa -> {
                     List<AutomaticCounterHistoryJpa> auxAutomaticCounterHistoryJpas =

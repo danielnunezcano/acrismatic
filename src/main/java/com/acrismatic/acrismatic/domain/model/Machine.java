@@ -9,7 +9,7 @@ import java.util.List;
 @Data
 @Builder
 @EqualsAndHashCode
-public class CustomResponse {
+public class Machine {
     private String machine;
     private String client;
     private List<IrregularCollection> irregularCollections;
